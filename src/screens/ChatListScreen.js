@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, FlatList} from 'react-native';
+import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 
 import Screen from '../components/Screen';
 import HeaderScreen from '../components/HeaderScreen';
@@ -18,18 +18,16 @@ function ChatListScreen({navigation}) {
   return (
     <Screen style={styles.container}>
       <HeaderScreen
-        title="Chats"
+        title="MESSAGES"
         image={require('../../assets/avatar.jpg')}
         renderRightBtn={() => (
-          <MaterialCommunityIcons
-            name="plus"
-            color="white"
-            size={30}
-            onPress={() => console.log('add')}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate('create-chat')}>
+            <MaterialCommunityIcons name="plus" color="white" size={30} />
+          </TouchableOpacity>
         )}
       />
       <FlatList
+        contentContainerStyle={{paddingBottom: 50}}
         data={data}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (

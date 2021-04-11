@@ -49,11 +49,7 @@ function ChatDetailScreen({route, navigation}) {
 
   return (
     <Screen style={styles.container}>
-      <HeaderScreen
-        title="Chats"
-        image={require('../../assets/avatar.jpg')}
-        renderLeftBtn={renderLeftBtn}
-      />
+      <HeaderScreen title="Chats" renderLeftBtn={renderLeftBtn} />
       <AppChat
         messages={messages}
         setMessages={setMessages}
