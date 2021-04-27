@@ -1,30 +1,15 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {Avatar} from 'react-native-elements';
+import AppAvatar from '../AppAvatar';
 
-function Inbox({
-  name,
-  message,
-  time,
-  image = require('../../../assets/avatar.jpg'),
-  onPress,
-  renderRightActions,
-}) {
+function Inbox({name, message, time, image, onPress, renderRightActions}) {
   return (
     <Swipeable renderRightActions={renderRightActions}>
       <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style={styles.item}>
           <View style={{width: '20%', alignItems: 'flex-start'}}>
-            <Avatar
-              rounded
-              source={image}
-              size={60}
-              containerStyle={{
-                borderWidth: 1,
-                borderColor: '#696969',
-              }}
-            />
+            <AppAvatar image={image} size={60} />
           </View>
           <View style={styles.content}>
             <Text style={styles.name}>{name}</Text>
@@ -42,7 +27,7 @@ function Inbox({
 }
 
 const styles = StyleSheet.create({
-  container: {backgroundColor: 'white'},
+  container: {backgroundColor: 'white', paddingVertical: 5},
   item: {
     marginVertical: 5,
     paddingHorizontal: 15,

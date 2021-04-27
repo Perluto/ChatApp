@@ -43,13 +43,13 @@ const AppNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="call"
+      name="contacts"
       component={ContactsScreen}
       options={{
         tabBarIcon: ({size, color}) => (
           <Ionicons name="call-outline" size={30} color={color} />
         ),
-        title: 'Call',
+        title: 'Contatcs',
       }}
     />
     <Tab.Screen
@@ -64,19 +64,5 @@ const AppNavigator = () => (
     />
   </Tab.Navigator>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    backgroundColor: '#3A86FF',
-    borderColor: 'white',
-    borderRadius: 37.5,
-    borderWidth: 5,
-    bottom: 27,
-    height: 75,
-    justifyContent: 'center',
-    width: 75,
-  },
-});
 
 export default AppNavigator;

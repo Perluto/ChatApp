@@ -1,11 +1,14 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {SearchBar} from 'react-native-elements';
+
 import ListFriends from '../components/ListFriends';
 import HeaderScreen from '../components/HeaderScreen';
 
 function NewMessageScreen({navigation}) {
-  const data = [
+  const data1 = [
     {id: 1, name: 'Hoang', avatar: null},
     {id: 2, name: 'Hoang', avatar: null},
     {id: 3, name: 'Hoang', avatar: null},
@@ -24,6 +27,8 @@ function NewMessageScreen({navigation}) {
     {id: 17, name: 'Hoang', avatar: null},
   ];
 
+  const [data, setData] = useState(data1);
+
   useEffect(() => {
     const parent = navigation.dangerouslyGetParent();
     parent.setOptions({
@@ -36,6 +41,12 @@ function NewMessageScreen({navigation}) {
       });
   }, []);
 
+  const [search, setSearch] = useState('');
+
+  const updateSearch = textChanged => {
+    setSearch(textChanged);
+  };
+
   const renderRightBtn = () => {
     return (
       <TouchableOpacity onPress={() => navigation.navigate('chat-list')}>
@@ -47,9 +58,27 @@ function NewMessageScreen({navigation}) {
   return (
     <View style={styles.container}>
       <HeaderScreen title="New Message" renderRightBtn={renderRightBtn} />
+      <SearchBar
+        round
+        placeholder="Type Here..."
+        onChangeText={updateSearch}
+        value={search}
+        containerStyle={{
+          backgroundColor: 'white',
+        }}
+        inputContainerStyle={{backgroundColor: 'white'}}
+      />
       <ListFriends
         data={data}
-        onPress={() => navigation.navigate('chat-detail')}
+        renderRightBtn={() => (
+          <TouchableOpacity onPress={() => navigation.navigate('chat-detail')}>
+            <Ionicons
+              name="md-chatbox-ellipses-outline"
+              size={30}
+              color="#3A86FF"
+            />
+          </TouchableOpacity>
+        )}
       />
     </View>
   );

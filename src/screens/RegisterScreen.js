@@ -8,47 +8,67 @@ import {
   ErrorMessage,
   SubmitBtn,
 } from '../components/forms';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as Yup from 'yup';
 import ActivityIndicator from '../components/ActivityIndicator';
 
+import * as Yup from 'yup';
+
+import userApi from '../api/user';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
 import useApi from '../hooks/useApi';
 
 const validateSchema = Yup.object().shape({
-  email: Yup.string().email().min(6).required().label('Email'),
-  password: Yup.string().min(4).required().label('Password'),
+  email: Yup.string().email().required().label('Email'),
+  password: Yup.string().min(6).required().label('Password'),
+  name: Yup.string().max(20).min(5).required().label('Name'),
 });
 
-function LoginScreen({navigation}) {
-  const auth = useAuth();
+function RegisterScreen() {
+  const registerApi = useApi(userApi.register);
   const loginApi = useApi(authApi.login);
+  const auth = useAuth();
+  const [error, setError] = useState();
 
-  const [loginFailed, setLoginFailed] = useState(false);
+  const handleSubmit = async userInfo => {
+    const result = await registerApi.request(userInfo);
 
-  const handleSubmit = async ({email, password}) => {
-    const result = await loginApi.request(email, password);
-    if (!result.ok) return setLoginFailed(true);
+    if (!result.ok) {
+      if (result.data) setError(result.data.error);
+      else {
+        setError('An unexpected error occurred.');
+      }
 
-    setLoginFailed(false);
-    auth.logIn(result.data);
+      return;
+    }
+
+    const {data: authToken} = await loginApi.request(
+      userInfo.email,
+      userInfo.password,
+    );
+
+    auth.logIn(authToken);
   };
 
   return (
     <>
-      <ActivityIndicator visible={loginApi.loading} />
+      <ActivityIndicator visible={registerApi.loading || loginApi.loading} />
       <Screen style={styles.container}>
-        <MaterialCommunityIcons name="wechat" color="white" size={200} />
+        <MaterialCommunityIcons name="wechat" color="white" size={150} />
         <Text style={styles.title}>hello</Text>
         <AppForm
-          initialValues={{email: '', password: ''}}
+          initialValues={{email: '', password: '', name: ''}}
           onSubmit={handleSubmit}
           validationSchema={validateSchema}>
-          <ErrorMessage
-            error="Invalid email and/or password."
-            visible={loginFailed}
+          <ErrorMessage error={error} visible={error} />
+          <AppFormField
+            name="name"
+            placeholder="Name"
+            icon="account"
+            autoCapitalize="words"
+            textContentType="name"
+            autoCorrect={false}
+            width="75%"
           />
           <AppFormField
             name="email"
@@ -56,8 +76,9 @@ function LoginScreen({navigation}) {
             icon="email"
             autoCapitalize="none"
             autoCorrect={false}
-            textContentType="nickname"
-            width="75%"></AppFormField>
+            textContentType="emailAddress"
+            width="75%"
+          />
           <AppFormField
             name="password"
             placeholder="Password"
@@ -66,17 +87,10 @@ function LoginScreen({navigation}) {
             autoCorrect={false}
             secureTextEntry
             textContentType="password"
-            width="75%"></AppFormField>
-          <SubmitBtn title="Sign in" color="#EF798A" width="75%" />
+            width="75%"
+          />
+          <SubmitBtn title="Sign Up" color="#EF798A" width="75%" />
         </AppForm>
-        <View style={styles.registerContainer}>
-          <Text style={{color: '#F9F9F9'}}>Don't have an account?</Text>
-          <Text
-            style={{color: '#F9F9F9'}}
-            onPress={() => navigation.navigate('register')}>
-            SIGN UP
-          </Text>
-        </View>
       </Screen>
     </>
   );
@@ -90,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 90,
+    fontSize: 80,
     color: 'white',
     fontFamily: 'Hello',
   },
@@ -100,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

@@ -18,7 +18,7 @@ function ChatListScreen({navigation}) {
   return (
     <Screen style={styles.container}>
       <HeaderScreen
-        title="MESSAGES"
+        title="Messages"
         image={require('../../assets/avatar.jpg')}
         renderRightBtn={() => (
           <TouchableOpacity onPress={() => navigation.navigate('create-chat')}>
@@ -51,7 +51,7 @@ function ChatListScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {backgroundColor: 'white', flex: 1},
+  container: {backgroundColor: '#f8f4f4', flex: 1},
 });
 
 export default ChatListScreen;

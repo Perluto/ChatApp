@@ -7,37 +7,23 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import AppAvatar from '../components/AppAvatar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function ListFriends({data, message = true, onPress}) {
+function ListFriends({data, renderRightBtn = null}) {
   return (
     <View style={styles.container}>
       <FlatList
-        contentContainerStyle={{paddingBottom: 50}}
+        contentContainerStyle={{paddingVertical: 10}}
         data={data}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
           <View style={styles.boxContainer}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View style={styles.imageContainer}>
-                <Image
-                  source={require('../../assets/avatar.jpg')}
-                  style={styles.image}
-                />
-                <Image
-                  source={require('../../assets/off.png')}
-                  style={styles.frame}
-                />
-              </View>
+              <AppAvatar size={60} />
               <Text style={styles.text}>{item.name}</Text>
             </View>
-            <TouchableOpacity onPress={onPress}>
-              <Ionicons
-                name={message ? 'md-chatbox-ellipses-outline' : 'call-outline'}
-                size={30}
-                color="#3A86FF"
-              />
-            </TouchableOpacity>
+            {renderRightBtn && renderRightBtn()}
           </View>
         )}
       />
@@ -46,7 +32,7 @@ function ListFriends({data, message = true, onPress}) {
 }
 
 const styles = StyleSheet.create({
-  container: {paddingHorizontal: 15},
+  container: {paddingHorizontal: 15, flex: 1},
   boxContainer: {
     paddingVertical: 5,
     flexDirection: 'row',
@@ -72,7 +58,8 @@ const styles = StyleSheet.create({
   },
   text: {
     marginLeft: 15,
-    fontSize: 30,
+    fontSize: 25,
+    color: '#242424',
   },
 });
 
