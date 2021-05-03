@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, Text, Platform} from 'react-native';
 import {Avatar, ListItem, Icon} from 'react-native-elements';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Yup from 'yup';
+import storage from '@react-native-firebase/storage';
 
 import ModalChange from './ModalChange';
 
@@ -40,6 +41,7 @@ function Info() {
   const auth = useAuth();
   const [visible, setVisible] = useState(false);
   const [dataModal, setDataModal] = useState();
+  const [user, setUser] = useState(null);
 
   const toggleOverlay = name => {
     setVisible(!visible);
@@ -49,7 +51,7 @@ function Info() {
         title: 'Change Password',
         textContentType: 'password',
         icon: 'lock',
-        onPress: changePassword,
+        onPress: onChangeData,
       });
 
     if (name === 'name')
@@ -58,30 +60,39 @@ function Info() {
         title: 'Change Name',
         textContentType: 'name',
         icon: 'account',
-        onPress: changeName,
+        onPress: onChangeData,
       });
   };
 
-  const changePassword = newPassword => {
-    console.log(newPassword);
+  const onChangeData = (newData, {props}) => {
+    console.log(props);
   };
 
-  const changeName = newName => {
-    console.log(newName);
+  const uploadImg = async img => {
+    const reference = storage().ref(`avatar/${user.id}`);
+    await reference.putFile(img.uri);
   };
 
   const handleSelectImg = () => {
     ImagePicker.launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log(response);
+      if (!response.didCancel) uploadImg(response);
     });
   };
+
+  useEffect(() => {
+    setUser(auth.user);
+  }, []);
 
   return (
     <>
       <View style={styles.container}>
         <View style={styles.profile}>
           <Avatar
-            source={require('../../assets/avatar.jpg')}
+            source={
+              user?.avatarURI
+                ? {uri: user.avatarURI}
+                : require('../../assets/avatar.jpg')
+            }
             rounded
             containerStyle={{borderWidth: 1}}
             size={80}

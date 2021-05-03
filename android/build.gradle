@@ -1,6 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    dependencies {
+    // ... other dependencies
+    classpath 'com.google.gms:google-services:4.3.4'
+    // Add me --- /\
+    }
     ext {
         buildToolsVersion = "29.0.3"
         minSdkVersion = 21

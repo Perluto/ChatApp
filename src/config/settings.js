@@ -1,12 +1,12 @@
 const settings = {
   dev: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'http://192.168.0.101:5000/api',
   },
   staging: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'http://192.168.0.101:5000/api',
   },
   prod: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'http://192.168.0.101:5000/api',
   },
 };
 
