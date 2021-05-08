@@ -18,6 +18,8 @@ target 'ChatApp' do
 
 
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   target 'ChatAppTests' do
     inherit! :complete
     # Pods for testing

@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
 import AppAvatar from '../components/AppAvatar';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function ListFriends({data, renderRightBtn = null}) {
   return (
@@ -20,10 +12,14 @@ function ListFriends({data, renderRightBtn = null}) {
         renderItem={({item}) => (
           <View style={styles.boxContainer}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <AppAvatar size={60} />
+              <AppAvatar
+                size={60}
+                imageURI={item.avatar}
+                online={item.online}
+              />
               <Text style={styles.text}>{item.name}</Text>
             </View>
-            {renderRightBtn && renderRightBtn()}
+            {renderRightBtn && renderRightBtn(item)}
           </View>
         )}
       />

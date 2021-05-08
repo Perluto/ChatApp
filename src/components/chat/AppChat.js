@@ -1,13 +1,48 @@
-import React, {useState, useCallback} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
-import {Send, Actions, GiftedChat} from 'react-native-gifted-chat';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, Image} from 'react-native';
+import {Actions, GiftedChat} from 'react-native-gifted-chat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'react-native-image-picker';
 import ImageView from 'react-native-image-viewing';
 import AppMessage from './AppMessage';
 
-function AppChat({user, messages, setMessages}) {
+import firestore from '@react-native-firebase/firestore';
+
+const chatsRef = firestore().collection('chats');
+
+function AppChat({user, idRoomChat}) {
   const [isVisible, setIsVisible] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const roomChat = chatsRef.doc(idRoomChat).collection('messages');
+
+  useEffect(() => {
+    const unsubscribe = roomChat.onSnapshot(querySnapshot => {
+      const messagesFirestore = querySnapshot
+        .docChanges()
+        .filter(({type}) => type === 'added')
+        .map(({doc}) => {
+          const message = doc.data();
+          return {...message, createdAt: message.createdAt.toDate()};
+        })
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      appendMessages(messagesFirestore);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const appendMessages = useCallback(
+    messages => {
+      setMessages(previousMessages =>
+        GiftedChat.append(previousMessages, messages),
+      );
+    },
+    [messages],
+  );
+
+  const handleSend = async messages => {
+    const writes = messages.map(m => roomChat.add(m));
+    await Promise.all(writes);
+  };
 
   const handleSelectImg = props => {
     ImagePicker.launchImageLibrary({mediaType: 'photo'}, response => {
@@ -63,16 +98,10 @@ function AppChat({user, messages, setMessages}) {
     return <AppMessage {...props} />;
   };
 
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
-    );
-  }, []);
-
   return (
     <GiftedChat
       messages={messages}
-      onSend={messages => onSend(messages)}
+      onSend={handleSend}
       renderMessage={renderMessage}
       renderMessageImage={renderMessageImage}
       renderActions={renderActions}
@@ -81,9 +110,5 @@ function AppChat({user, messages, setMessages}) {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default AppChat;

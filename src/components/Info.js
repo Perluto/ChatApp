@@ -90,7 +90,7 @@ function Info() {
           <Avatar
             source={
               user?.avatarURI
-                ? {uri: user.avatarURI}
+                ? {uri: user.avatar}
                 : require('../../assets/avatar.jpg')
             }
             rounded

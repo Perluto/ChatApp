@@ -2,16 +2,12 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Avatar, Badge} from 'react-native-elements';
 
-function AppAvatar({
-  size,
-  image = require('../../assets/avatar.jpg'),
-  online = false,
-}) {
+function AppAvatar({size, imageURI, online = false}) {
   return (
     <View>
       <Avatar
         rounded
-        source={image}
+        source={{uri: imageURI}}
         size={size}
         containerStyle={{
           borderWidth: 1,

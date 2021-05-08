@@ -6,6 +6,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import AuthNavigator from './src/navigation/AuthNavigator';
 
 import authStorage from './src/auth/storage';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
   const [user, setUser] = useState();
@@ -17,12 +18,13 @@ export default function App() {
 
   useEffect(() => {
     restoreUser();
+    SplashScreen.hide();
   }, []);
 
   return (
     <AuthContext.Provider value={{user, setUser}}>
       <NavigationContainer>
-        <AppNavigator />
+        {user ? <AppNavigator /> : <AuthNavigator />}
       </NavigationContainer>
     </AuthContext.Provider>
   );

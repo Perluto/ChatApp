@@ -6,27 +6,25 @@ import Screen from '../components/Screen';
 import HeaderScreen from '../components/HeaderScreen';
 import {AppChat} from '../components/chat';
 
+import useAuth from '../auth/useAuth';
+
 function ChatDetailScreen({route, navigation}) {
-  const [messages, setMessages] = useState([]);
+  const [user, setUser] = useState(null);
+  const auth = useAuth();
 
   useEffect(() => {
+    const tmp = {
+      _id: auth.user.id,
+      name: auth.user.name,
+      avatar: auth.user.avatar,
+    };
+
+    setUser(tmp);
+
     const parent = navigation.dangerouslyGetParent();
     parent.setOptions({
       tabBarVisible: false,
     });
-
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
 
     return () =>
       parent.setOptions({
@@ -50,13 +48,7 @@ function ChatDetailScreen({route, navigation}) {
   return (
     <Screen style={styles.container}>
       <HeaderScreen title="Chats" renderLeftBtn={renderLeftBtn} />
-      <AppChat
-        messages={messages}
-        setMessages={setMessages}
-        user={{
-          _id: 1,
-        }}
-      />
+      <AppChat user={user} idRoomChat={route.params.idRoomChat} />
     </Screen>
   );
 }

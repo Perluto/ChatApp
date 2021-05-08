@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -7,27 +7,54 @@ import {SearchBar} from 'react-native-elements';
 import ListFriends from '../components/ListFriends';
 import HeaderScreen from '../components/HeaderScreen';
 
-function NewMessageScreen({navigation}) {
-  const data1 = [
-    {id: 1, name: 'Hoang', avatar: null},
-    {id: 2, name: 'Hoang', avatar: null},
-    {id: 3, name: 'Hoang', avatar: null},
-    {id: 5, name: 'Hoang', avatar: null},
-    {id: 6, name: 'Hoang', avatar: null},
-    {id: 7, name: 'Hoang', avatar: null},
-    {id: 8, name: 'Hoang', avatar: null},
-    {id: 9, name: 'Hoang', avatar: null},
-    {id: 10, name: 'Hoang', avatar: null},
-    {id: 11, name: 'Hoang', avatar: null},
-    {id: 12, name: 'Hoang', avatar: null},
-    {id: 13, name: 'Hoang', avatar: null},
-    {id: 14, name: 'Hoang', avatar: null},
-    {id: 15, name: 'Hoang', avatar: null},
-    {id: 16, name: 'Hoang', avatar: null},
-    {id: 17, name: 'Hoang', avatar: null},
-  ];
+import lodash from 'lodash';
 
-  const [data, setData] = useState(data1);
+import firestore from '@react-native-firebase/firestore';
+import useAuth from '../auth/useAuth';
+import chatApi from '../api/chat';
+
+const usersRef = firestore().collection('users');
+
+function NewMessageScreen({navigation}) {
+  const [users, setUsers] = useState([]);
+  const {user} = useAuth();
+
+  const changeData = useCallback(
+    users => {
+      setUsers(prevUsers => {
+        const tmp = [...prevUsers];
+
+        users.forEach(item => {
+          const index = tmp.findIndex(e => e.id === item.id);
+          if (index === -1) tmp.push(item);
+          else {
+            tmp[index] = item;
+          }
+        });
+        return tmp;
+      });
+    },
+    [users],
+  );
+
+  useEffect(() => {
+    const unsubscribe = usersRef
+      .where('email', '!=', user.email)
+      .onSnapshot(querySnapshot => {
+        const usersFirestore = querySnapshot
+          .docChanges()
+          .map(({doc}) => {
+            const {name, avatar, online} = doc.data();
+            const id = doc.id;
+            return {id, name, avatar, online};
+          })
+          .sort((a, b) => b.online - a.online);
+
+        changeData(usersFirestore);
+      });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const parent = navigation.dangerouslyGetParent();
@@ -41,8 +68,12 @@ function NewMessageScreen({navigation}) {
       });
   }, []);
 
-  const [search, setSearch] = useState('');
+  const createNewMessage = async participants => {
+    const result = await chatApi.createNewMessage(participants);
+    navigation.navigate('chat-detail', {idRoomChat: result.data});
+  };
 
+  const [search, setSearch] = useState('');
   const updateSearch = textChanged => {
     setSearch(textChanged);
   };
@@ -69,9 +100,15 @@ function NewMessageScreen({navigation}) {
         inputContainerStyle={{backgroundColor: 'white'}}
       />
       <ListFriends
-        data={data}
-        renderRightBtn={() => (
-          <TouchableOpacity onPress={() => navigation.navigate('chat-detail')}>
+        data={users}
+        renderRightBtn={otherUser => (
+          <TouchableOpacity
+            onPress={() =>
+              createNewMessage([
+                lodash.pick(otherUser, ['id', 'name', 'avatar']),
+                lodash.pick(user, ['id', 'name', 'avatar']),
+              ])
+            }>
             <Ionicons
               name="md-chatbox-ellipses-outline"
               size={30}
