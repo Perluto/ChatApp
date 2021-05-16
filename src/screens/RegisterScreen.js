@@ -17,6 +17,7 @@ import userApi from '../api/user';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
 import useApi from '../hooks/useApi';
+import {AuthService} from '../servicesCall';
 
 const validateSchema = Yup.object().shape({
   email: Yup.string().email().required().label('Email'),
@@ -46,7 +47,10 @@ function RegisterScreen() {
       userInfo.email,
       userInfo.password,
     );
+    const user = {login: userInfo.email, password: userInfo.password};
 
+    await AuthService.create(userInfo);
+    AuthService.login(user);
     auth.logIn(authToken);
   };
 

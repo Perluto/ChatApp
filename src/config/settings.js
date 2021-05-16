@@ -1,12 +1,12 @@
 const settings = {
   dev: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'https://rocky-mesa-78249.herokuapp.com/api',
   },
   staging: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'https://rocky-mesa-78249.herokuapp.com/api',
   },
   prod: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'https://rocky-mesa-78249.herokuapp.com/api',
   },
 };
 
@@ -15,3 +15,14 @@ const getCurrentSettings = () => {
 };
 
 export default getCurrentSettings();
+
+export const user = [
+  {
+    appId: 4568,
+    authKey: 'OkrW3CaB-L75QPA',
+    authSecret: 'gxbMSRdLZMJZNkH',
+  },
+  {
+    debug: {mode: 1},
+  },
+];
