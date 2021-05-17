@@ -5,8 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import ChatNavigator from './ChatNavigator';
-
-import GroupChatListScreen from '../screens/GroupChatListScreen';
+import GroupNavigator from './GroupNavigator';
 import ContactsScreen from '../screens/ContactsScreen';
 import SettingScreen from '../screens/SettingScreen';
 
@@ -30,7 +29,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="groups"
-      component={GroupChatListScreen}
+      component={GroupNavigator}
       options={{
         tabBarIcon: ({size, color}) => (
           <MaterialCommunityIcons

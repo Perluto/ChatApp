@@ -4,14 +4,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {SearchBar} from 'react-native-elements';
 
-import ListFriends from '../components/ListFriends';
-import HeaderScreen from '../components/HeaderScreen';
+import ListFriends from '../../components/ListFriends';
+import HeaderScreen from '../../components/HeaderScreen';
 
 import lodash from 'lodash';
 
 import firestore from '@react-native-firebase/firestore';
-import useAuth from '../auth/useAuth';
-import chatApi from '../api/chat';
+import useAuth from '../../auth/useAuth';
+import chatApi from '../../api/chat';
 
 const usersRef = firestore().collection('users');
 
@@ -70,7 +70,11 @@ function NewMessageScreen({navigation}) {
 
   const createNewMessage = async participants => {
     const result = await chatApi.createNewMessage(participants);
-    navigation.navigate('chat-detail', {idRoomChat: result.data});
+    console.log(result.data);
+    navigation.navigate('chat-detail', {
+      idRoomChat: result.data.idRoomChat,
+      roomName: result.data.roomName,
+    });
   };
 
   const [search, setSearch] = useState('');

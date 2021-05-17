@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 
 import AuthContext from './context';
 import authStorage from './storage';
+import userApi from '../api/user';
 
 export default useAuth = () => {
   const {user, setUser} = useContext(AuthContext);
@@ -13,7 +14,8 @@ export default useAuth = () => {
     authStorage.storeToken(authToken);
   };
 
-  const logOut = () => {
+  const logOut = async () => {
+    await userApi.updateStatus(user.id, false);
     setUser(null);
     authStorage.removeToken();
   };

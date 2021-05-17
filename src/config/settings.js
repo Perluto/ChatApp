@@ -1,12 +1,12 @@
 const settings = {
   dev: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'https://rocky-mesa-78249.herokuapp.com/api',
   },
   staging: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'https://rocky-mesa-78249.herokuapp.com/api',
   },
   prod: {
-    apiUrl: 'http://192.168.0.104:5000/api',
+    apiUrl: 'https://rocky-mesa-78249.herokuapp.com/api',
   },
 };
 

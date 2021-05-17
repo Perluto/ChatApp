@@ -10,7 +10,7 @@ import useAuth from '../auth/useAuth';
 
 const usersRef = firestore().collection('users');
 
-function ContactsScreen({navigation}) {
+function ContactsScreen() {
   const [users, setUsers] = useState([]);
   const {user} = useAuth();
 

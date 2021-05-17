@@ -3,16 +3,16 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import AppAvatar from '../AppAvatar';
 
-function Inbox({name, message = '', image, onPress, renderRightActions}) {
+function Inbox({room, message = '...', onPress, renderRightActions}) {
   return (
     <Swipeable renderRightActions={renderRightActions}>
       <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style={styles.item}>
           <View style={{width: '20%', alignItems: 'flex-start'}}>
-            <AppAvatar image={image} size={60} />
+            <AppAvatar imageURI={room.avatar} size={60} />
           </View>
           <View style={styles.content}>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name}>{room.name}</Text>
             <Text style={styles.message} numberOfLines={1} ellipsizeMode="tail">
               {message}
             </Text>

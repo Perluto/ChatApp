@@ -20,7 +20,7 @@ import useApi from '../hooks/useApi';
 
 const validateSchema = Yup.object().shape({
   email: Yup.string().email().required().label('Email'),
-  password: Yup.string().min(6).required().label('Password'),
+  password: Yup.string().min(8).required().label('Password'),
   name: Yup.string().max(20).min(5).required().label('Name'),
 });
 
