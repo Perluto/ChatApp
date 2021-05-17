@@ -15,3 +15,14 @@ const getCurrentSettings = () => {
 };
 
 export default getCurrentSettings();
+
+export const user = [
+  {
+    appId: 4568,
+    authKey: 'OkrW3CaB-L75QPA',
+    authSecret: 'gxbMSRdLZMJZNkH',
+  },
+  {
+    debug: {mode: 1},
+  },
+];

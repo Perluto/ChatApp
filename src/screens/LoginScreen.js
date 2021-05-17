@@ -16,6 +16,8 @@ import ActivityIndicator from '../components/ActivityIndicator';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
 import useApi from '../hooks/useApi';
+import {AuthService} from '../servicesCall';
+import {user} from '../config/settings';
 
 const validateSchema = Yup.object().shape({
   email: Yup.string().email().min(6).required().label('Email'),
@@ -32,6 +34,8 @@ function LoginScreen({navigation}) {
     const result = await loginApi.request(email, password);
     if (!result.ok) return setLoginFailed(true);
 
+    const user = {login: email, password: password};
+    AuthService.login(user);
     setLoginFailed(false);
     auth.logIn(result.data);
   };
