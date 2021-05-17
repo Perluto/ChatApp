@@ -202,6 +202,7 @@ export default class ContactsScreen extends React.Component {
       })
       .catch(this.hideInomingCallModal);
   };
+
   unsubscribe = async () => {
     const {user} = this.context;
     this.usersRef.where('email', '!=', user.email).onSnapshot(querySnapshot => {
@@ -216,15 +217,18 @@ export default class ContactsScreen extends React.Component {
 
       this.changeData(usersFirestore);
     });
+
     const data = await AuthService.getUser({user_tags: ['apple']});
     this.userCall = data.items.map(User => User.user);
     console.log(this.userCall);
   };
+
   changeData = usersFirestore => {
     this.setState(prevUsers => ({
       users: this.getUser(prevUsers.users, usersFirestore),
     }));
   };
+
   getUser = (prevUsers, users) => {
     const tmp = prevUsers;
 
@@ -241,6 +245,7 @@ export default class ContactsScreen extends React.Component {
   updateSearch = textChanged => {
     this.setState({search: textChanged});
   };
+
   startCall = async user => {
     const {selectedUsersIds} = this.state;
     const userId = await AuthService.getUser({email: user.email});

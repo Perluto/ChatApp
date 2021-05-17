@@ -1,7 +1,7 @@
 import client from './client';
 
 const createNewGroup = participants => client.post('/group', {participants});
-const getGroupMessages = id => client.get(`/group/${id}`);
+const getGroupMessages = () => client.get(`/group`);
 
 export default {
   createNewGroup,

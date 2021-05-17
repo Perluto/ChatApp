@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import Screen from '../../components/Screen';
 import HeaderScreen from '../../components/HeaderScreen';
@@ -8,9 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import useAuth from '../../auth/useAuth';
 import useApi from '../../hooks/useApi';
 import chatApi from '../../api/chat';
-
-import firestore from '@react-native-firebase/firestore';
-const chatsRef = firestore().collection('chats');
+import groupApi from '../../api/group';
 
 function GroupListScreen({navigation}) {
   const [messages, setMessages] = useState([]);
