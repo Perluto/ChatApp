@@ -11,7 +11,6 @@ import ToolBar from '../components/call/ToolBar';
 import RTCViewGrid from '../components/call/RTCViewGrid';
 
 import firestore from '@react-native-firebase/firestore';
-import useAuth from '../auth/useAuth';
 import AuthContext from '../auth/context';
 
 export default class ContactsScreen extends React.Component {
@@ -39,7 +38,7 @@ export default class ContactsScreen extends React.Component {
   }
   componentWillUnmount() {
     this.unsubscribe();
-    CallService.stopCall();
+    //CallService.stopCall();
   }
   componentDidUpdate(prevProps, prevState) {
     const currState = this.state;
