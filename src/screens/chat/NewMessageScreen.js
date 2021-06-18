@@ -4,14 +4,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {SearchBar} from 'react-native-elements';
 
-import ListFriends from '../components/ListFriends';
-import HeaderScreen from '../components/HeaderScreen';
+import ListFriends from '../../components/ListFriends';
+import HeaderScreen from '../../components/HeaderScreen';
 
 import lodash from 'lodash';
 
 import firestore from '@react-native-firebase/firestore';
-import useAuth from '../auth/useAuth';
-import chatApi from '../api/chat';
+import useAuth from '../../auth/useAuth';
+import chatApi from '../../api/chat';
 
 const usersRef = firestore().collection('users');
 
@@ -68,9 +68,13 @@ function NewMessageScreen({navigation}) {
       });
   }, []);
 
-  const createNewMessage = async participants => {
+  const createNewMessage = async (participants, name) => {
     const result = await chatApi.createNewMessage(participants);
-    navigation.navigate('chat-detail', {idRoomChat: result.data});
+
+    navigation.navigate('chat-detail', {
+      idRoomChat: result.data.idRoomChat,
+      roomName: name,
+    });
   };
 
   const [search, setSearch] = useState('');
@@ -104,10 +108,7 @@ function NewMessageScreen({navigation}) {
         renderRightBtn={otherUser => (
           <TouchableOpacity
             onPress={() =>
-              createNewMessage([
-                lodash.pick(otherUser, ['id', 'name', 'avatar']),
-                lodash.pick(user, ['id', 'name', 'avatar']),
-              ])
+              createNewMessage([otherUser.id, user.id], otherUser.name)
             }>
             <Ionicons
               name="md-chatbox-ellipses-outline"

@@ -201,6 +201,7 @@ export default class ContactsScreen extends React.Component {
       })
       .catch(this.hideInomingCallModal);
   };
+
   unsubscribe = async () => {
     const {user} = this.context;
     this.usersRef.where('email', '!=', user.email).onSnapshot(querySnapshot => {
@@ -215,15 +216,18 @@ export default class ContactsScreen extends React.Component {
 
       this.changeData(usersFirestore);
     });
+
     const data = await AuthService.getUser({user_tags: ['apple']});
     this.userCall = data.items.map(User => User.user);
     console.log(this.userCall);
   };
+
   changeData = usersFirestore => {
     this.setState(prevUsers => ({
       users: this.getUser(prevUsers.users, usersFirestore),
     }));
   };
+
   getUser = (prevUsers, users) => {
     const tmp = prevUsers;
 
@@ -240,6 +244,7 @@ export default class ContactsScreen extends React.Component {
   updateSearch = textChanged => {
     this.setState({search: textChanged});
   };
+
   startCall = async user => {
     const {selectedUsersIds} = this.state;
     const userId = await AuthService.getUser({email: user.email});
@@ -338,3 +343,95 @@ export default class ContactsScreen extends React.Component {
     );
   }
 }
+/*
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {SearchBar} from 'react-native-elements';
+import ListFriends from '../components/ListFriends';
+import HeaderScreen from '../components/HeaderScreen';
+
+import firestore from '@react-native-firebase/firestore';
+import useAuth from '../auth/useAuth';
+
+const usersRef = firestore().collection('users');
+function ContactsScreen() {
+  const [users, setUsers] = useState([]);
+  const {user} = useAuth();
+
+  const changeData = useCallback(
+    users => {
+      setUsers(prevUsers => {
+        const tmp = [...prevUsers];
+
+        users.forEach(item => {
+          const index = tmp.findIndex(e => e.id === item.id);
+          if (index === -1) tmp.push(item);
+          else {
+            tmp[index] = item;
+          }
+        });
+        return tmp;
+      });
+    },
+    [users],
+  );
+
+  useEffect(() => {
+    const unsubscribe = usersRef
+      .where('email', '!=', user.email)
+      .onSnapshot(querySnapshot => {
+        const usersFirestore = querySnapshot
+          .docChanges()
+          .map(({doc}) => {
+            const {name, avatar, online} = doc.data();
+            const id = doc.id;
+            return {id, name, avatar, online};
+          })
+          .sort((a, b) => b.online - a.online);
+
+        changeData(usersFirestore);
+      });
+
+    return () => unsubscribe();
+  }, []);
+
+  const [search, setSearch] = useState('');
+  const updateSearch = textChanged => {
+    setSearch(textChanged);
+  };
+
+  return (
+    <View style={styles.container}>
+      <HeaderScreen title="Contacts" />
+      <SearchBar
+        round
+        placeholder="Type Here..."
+        onChangeText={updateSearch}
+        value={search}
+        containerStyle={{
+          backgroundColor: 'white',
+        }}
+        inputContainerStyle={{backgroundColor: 'white'}}
+      />
+      <ListFriends
+        data={users}
+        renderRightBtn={() => (
+          <TouchableOpacity onPress={() => console.log(1)}>
+            <Ionicons name="call-outline" size={30} color="#3A86FF" />
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+});
+
+export default ContactsScreen;
+*/

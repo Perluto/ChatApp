@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Screen from '../components/Screen';
-import HeaderScreen from '../components/HeaderScreen';
-import {AppChat} from '../components/chat';
+import Screen from '../../components/Screen';
+import HeaderScreen from '../../components/HeaderScreen';
+import {AppChat} from '../../components/chat';
 
-import useAuth from '../auth/useAuth';
+import useAuth from '../../auth/useAuth';
 
 function ChatDetailScreen({route, navigation}) {
   const [user, setUser] = useState(null);
@@ -47,7 +47,10 @@ function ChatDetailScreen({route, navigation}) {
 
   return (
     <Screen style={styles.container}>
-      <HeaderScreen title="Chats" renderLeftBtn={renderLeftBtn} />
+      <HeaderScreen
+        title={route.params.roomName}
+        renderLeftBtn={renderLeftBtn}
+      />
       <AppChat user={user} idRoomChat={route.params.idRoomChat} />
     </Screen>
   );

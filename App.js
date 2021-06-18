@@ -11,14 +11,10 @@ import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
   const [user, setUser] = useState();
-  const [isLogin, setIsLogin] = useState(false);
 
   const restoreUser = async () => {
     const user = await authStorage.getUser();
-    if (user) {
-      setUser(user);
-      setIsLogin(true);
-    }
+    if (user) setUser(user);
   };
 
   useEffect(() => {
@@ -26,7 +22,7 @@ export default function App() {
     AuthService.init();
     SplashScreen.hide();
   }, []);
-  if (user && !isLogin) {
+  if (user) {
     const acc = {login: user.email, password: '12345678'};
     AuthService.login(acc);
   }

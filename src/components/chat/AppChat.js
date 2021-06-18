@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {Actions, GiftedChat} from 'react-native-gifted-chat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'react-native-image-picker';
@@ -7,11 +7,13 @@ import ImageView from 'react-native-image-viewing';
 import AppMessage from './AppMessage';
 
 import firestore from '@react-native-firebase/firestore';
+import uploadImg from '../../utilities/uploadImg';
+import uuid from 'react-native-uuid';
 
 const chatsRef = firestore().collection('chats');
 
 function AppChat({user, idRoomChat}) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [messages, setMessages] = useState([]);
   const roomChat = chatsRef.doc(idRoomChat).collection('messages');
 
@@ -45,16 +47,22 @@ function AppChat({user, idRoomChat}) {
   };
 
   const handleSelectImg = props => {
-    ImagePicker.launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log(response);
+    ImagePicker.launchImageLibrary({mediaType: 'photo'}, async response => {
+      if (!response.didCancel) {
+        const id = uuid.v4();
+        const url = await uploadImg(response, `chat/${id}`);
+        props.onSend({image: url});
+      }
     });
   };
 
   const renderMessageImage = props => {
-    if (!!props.currentMessage) {
+    if (props.currentMessage.image) {
+      const uri = props.currentMessage.image;
+
       return (
         <View>
-          <TouchableOpacity {...props} onPress={() => setIsVisible(true)}>
+          <TouchableOpacity onPress={() => setVisible(true)}>
             <Image
               style={{
                 width: 200,
@@ -63,13 +71,13 @@ function AppChat({user, idRoomChat}) {
                 borderRadius: 15,
                 resizeMode: 'cover',
               }}
-              source={{uri: props.currentMessage.image}}
+              source={{uri: uri}}
             />
             <ImageView
-              images={[{uri: props.currentMessage.image}]}
+              images={[{uri: uri}]}
               imageIndex={0}
-              visible={isVisible}
-              onRequestClose={() => setIsVisible(false)}
+              visible={visible}
+              onRequestClose={() => setVisible(false)}
             />
           </TouchableOpacity>
         </View>
@@ -84,7 +92,7 @@ function AppChat({user, idRoomChat}) {
         {...props}
         icon={() => (
           <MaterialCommunityIcons
-            onPress={handleSelectImg}
+            onPress={() => handleSelectImg(props)}
             name="file-image-outline"
             size={25}
             color="#3A86FF"

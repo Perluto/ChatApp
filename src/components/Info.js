@@ -104,7 +104,7 @@ function Info() {
             containerStyle={{borderWidth: 1}}
             size={80}
           />
-          <Text style={styles.name}>Hoang</Text>
+          <Text style={styles.name}>{user?.name}</Text>
         </View>
         <View style={styles.separator}></View>
         <View>
