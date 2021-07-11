@@ -21,10 +21,10 @@ export default class AuthService {
   };
   create = user => {
     const userProfile = {
-      login: param.email,
-      password: param.password,
-      email: param.email,
-      full_name: param.name,
+      login: user.email,
+      password: user.password,
+      email: user.email,
+      full_name: user.name,
       phone: '103246421233',
       website: 'https://dozensofdreams.com',
       user_tags: ['iphone', 'apple'],

@@ -32,11 +32,12 @@ function LoginScreen({navigation}) {
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handleSubmit = async ({email, password}) => {
+    const user = {login: email, password: password};
+    await AuthService.login(user);
+
     const result = await loginApi.request(email, password);
     if (!result.ok) return setLoginFailed(true);
 
-    const user = {login: email, password: password};
-    AuthService.login(user);
     setLoginFailed(false);
     auth.logIn(result.data);
   };

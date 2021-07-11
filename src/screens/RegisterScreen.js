@@ -49,10 +49,16 @@ function RegisterScreen() {
       userInfo.email,
       userInfo.password,
     );
+    await AuthService.login({
+      login: 'duchocgioi@gmail.com',
+      password: '12345678',
+    });
     const user = {login: userInfo.email, password: userInfo.password};
 
-    await AuthService.create(userInfo);
-    AuthService.login(user);
+    AuthService.create(userInfo).then(async () => {
+      await AuthService.logout();
+    });
+    await AuthService.login(user);
     auth.logIn(authToken);
   };
 

@@ -8,6 +8,7 @@ import storage from '@react-native-firebase/storage';
 import ModalChange from './ModalChange';
 
 import useAuth from '../auth/useAuth';
+import {AuthService, CallService} from '../servicesCall';
 
 const validateSchema = Yup.object().shape({
   password: Yup.string().min(6).required().label('Password'),
@@ -41,7 +42,7 @@ function Info() {
     {
       title: 'Logout',
       icon: 'logout',
-      onPress: () => auth.logOut(),
+      onPress: () => logOutHandle(),
     },
   ];
 
@@ -49,6 +50,12 @@ function Info() {
   const [visible, setVisible] = useState(false);
   const [dataModal, setDataModal] = useState();
   const [user, setUser] = useState(null);
+
+  const logOutHandle = async () => {
+    auth.logOut();
+    await AuthService.logout();
+    CallService.stopCall();
+  };
 
   const toggleOverlay = name => {
     setVisible(!visible);

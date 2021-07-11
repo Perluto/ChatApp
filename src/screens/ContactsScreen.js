@@ -40,7 +40,7 @@ export default class ContactsScreen extends React.Component {
   }
   componentWillUnmount() {
     this.unsubscribe();
-    CallService.stopCall();
+    //CallService.stopCall();
   }
   componentDidUpdate(prevProps, prevState) {
     const currState = this.state;
