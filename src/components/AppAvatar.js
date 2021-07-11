@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Avatar, Badge} from 'react-native-elements';
 
-function AppAvatar({size, imageURI, online = false}) {
+function AppAvatar({size, imageURI, online = null}) {
   return (
     <View>
       <Avatar
@@ -14,10 +14,12 @@ function AppAvatar({size, imageURI, online = false}) {
           borderColor: '#696969',
         }}
       />
-      <Badge
-        status={online ? 'success' : 'error'}
-        containerStyle={{position: 'absolute', top: 47, left: 47}}
-      />
+      {online !== null ? (
+        <Badge
+          status={online ? 'success' : 'error'}
+          containerStyle={{position: 'absolute', top: 47, left: 47}}
+        />
+      ) : null}
     </View>
   );
 }

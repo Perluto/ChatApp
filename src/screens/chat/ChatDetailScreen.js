@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, LogBox} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Screen from '../../components/Screen';
@@ -7,6 +7,8 @@ import HeaderScreen from '../../components/HeaderScreen';
 import {AppChat} from '../../components/chat';
 
 import useAuth from '../../auth/useAuth';
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 function ChatDetailScreen({route, navigation}) {
   const [user, setUser] = useState(null);

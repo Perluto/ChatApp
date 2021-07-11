@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, LogBox} from 'react-native';
 
 import Screen from '../components/Screen';
 import {
@@ -24,6 +24,8 @@ const validateSchema = Yup.object().shape({
   password: Yup.string().min(8).required().label('Password'),
   name: Yup.string().max(20).min(5).required().label('Name'),
 });
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 function RegisterScreen() {
   const registerApi = useApi(userApi.register);

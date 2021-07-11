@@ -31,7 +31,6 @@ export default ({streams, isActiveSelect, userCall}) => {
   const streamsCount = streams.length;
 
   let RTCListView = null;
-  console.log(streamsCount);
 
   switch (streamsCount) {
     case 1:

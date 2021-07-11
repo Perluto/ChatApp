@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, LogBox} from 'react-native';
 
 import Screen from '../components/Screen';
 import {
@@ -17,7 +17,8 @@ import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
 import useApi from '../hooks/useApi';
 import {AuthService} from '../servicesCall';
-import {user} from '../config/settings';
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 const validateSchema = Yup.object().shape({
   email: Yup.string().email().min(6).required().label('Email'),

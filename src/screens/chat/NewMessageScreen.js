@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, LogBox} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {SearchBar} from 'react-native-elements';
@@ -7,11 +7,11 @@ import {SearchBar} from 'react-native-elements';
 import ListFriends from '../../components/ListFriends';
 import HeaderScreen from '../../components/HeaderScreen';
 
-import lodash from 'lodash';
-
 import firestore from '@react-native-firebase/firestore';
 import useAuth from '../../auth/useAuth';
 import chatApi from '../../api/chat';
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 const usersRef = firestore().collection('users');
 
@@ -69,6 +69,7 @@ function NewMessageScreen({navigation}) {
   }, []);
 
   const createNewMessage = async (participants, name) => {
+    console.log(participants);
     const result = await chatApi.createNewMessage(participants);
 
     navigation.navigate('chat-detail', {

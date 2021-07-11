@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, Platform} from 'react-native';
-import {Avatar, ListItem, Icon} from 'react-native-elements';
+import {Avatar, ListItem, Icon, Image} from 'react-native-elements';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Yup from 'yup';
 import storage from '@react-native-firebase/storage';
@@ -14,7 +14,14 @@ const validateSchema = Yup.object().shape({
   name: Yup.string().max(20).min(5).required().label('Name'),
 });
 
+function useForceUpdate() {
+  const [value, setValue] = useState(0); // integer state
+  return () => setValue(value => value + 1); // update the state to force render
+}
+
 function Info() {
+  const forceUpdate = useForceUpdate();
+
   const list = [
     {
       title: 'Change Name',
@@ -71,6 +78,7 @@ function Info() {
   const uploadImg = async img => {
     const reference = storage().ref(`avatar/${user.id}`);
     await reference.putFile(img.uri);
+    forceUpdate();
   };
 
   const handleSelectImg = () => {
@@ -89,9 +97,9 @@ function Info() {
         <View style={styles.profile}>
           <Avatar
             source={
-              user?.avatarURI
+              user?.avatar
                 ? {uri: user.avatar}
-                : require('../../assets/avatar.jpg')
+                : require('../../assets/avatar_placeholder.png')
             }
             rounded
             containerStyle={{borderWidth: 1}}

@@ -10,9 +10,8 @@ import firestore from '@react-native-firebase/firestore';
 import uploadImg from '../../utilities/uploadImg';
 import uuid from 'react-native-uuid';
 
-const chatsRef = firestore().collection('chats');
-
-function AppChat({user, idRoomChat}) {
+function AppChat({user, idRoomChat, collection = 'chats'}) {
+  const chatsRef = firestore().collection(collection);
   const [visible, setVisible] = useState(false);
   const [messages, setMessages] = useState([]);
   const roomChat = chatsRef.doc(idRoomChat).collection('messages');
@@ -50,7 +49,7 @@ function AppChat({user, idRoomChat}) {
     ImagePicker.launchImageLibrary({mediaType: 'photo'}, async response => {
       if (!response.didCancel) {
         const id = uuid.v4();
-        const url = await uploadImg(response, `chat/${id}`);
+        const url = await uploadImg(response, `${collection}/${id}`);
         props.onSend({image: url});
       }
     });

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {StyleSheet, FlatList, TouchableOpacity, LogBox} from 'react-native';
 import Screen from '../../components/Screen';
 import HeaderScreen from '../../components/HeaderScreen';
 import {Inbox, InboxDeleteAction, InboxSeparator} from '../../components/inbox';
@@ -9,8 +9,7 @@ import useAuth from '../../auth/useAuth';
 import useApi from '../../hooks/useApi';
 import chatApi from '../../api/chat';
 
-import firestore from '@react-native-firebase/firestore';
-const chatsRef = firestore().collection('chats');
+LogBox.ignoreLogs(['Warning: ...']);
 
 function ChatListScreen({navigation}) {
   const [messages, setMessages] = useState([]);

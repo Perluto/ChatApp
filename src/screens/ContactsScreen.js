@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, LogBox, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {SearchBar} from 'react-native-elements';
 import ConnectyCube from 'react-native-connectycube';
@@ -11,8 +11,9 @@ import ToolBar from '../components/call/ToolBar';
 import RTCViewGrid from '../components/call/RTCViewGrid';
 
 import firestore from '@react-native-firebase/firestore';
-import useAuth from '../auth/useAuth';
 import AuthContext from '../auth/context';
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 export default class ContactsScreen extends React.Component {
   static contextType = AuthContext;
@@ -220,7 +221,6 @@ export default class ContactsScreen extends React.Component {
 
     const data = await AuthService.getUser({user_tags: ['apple']});
     this.userCall = data.items.map(User => User.user);
-    console.log(this.userCall);
   };
 
   changeData = usersFirestore => {

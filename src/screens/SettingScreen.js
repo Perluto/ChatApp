@@ -1,7 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, LogBox} from 'react-native';
 import HeaderScreen from '../components/HeaderScreen';
 import Info from '../components/Info';
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 function SettingScreen() {
   return (

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {StyleSheet, FlatList, TouchableOpacity, LogBox} from 'react-native';
 import Screen from '../../components/Screen';
 import HeaderScreen from '../../components/HeaderScreen';
 import {Inbox, InboxDeleteAction, InboxSeparator} from '../../components/inbox';
@@ -7,14 +7,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import useAuth from '../../auth/useAuth';
 import useApi from '../../hooks/useApi';
-import chatApi from '../../api/chat';
 import groupApi from '../../api/group';
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 function GroupListScreen({navigation}) {
   const [messages, setMessages] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const {user} = useAuth();
-  const getMessagesApi = useApi(chatApi.getMessages);
+  const getMessagesApi = useApi(groupApi.getGroupMessages);
 
   const getMessages = async idUser => {
     setRefreshing(true);
